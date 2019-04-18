@@ -1,0 +1,19 @@
+{
+"canada": [
+{"state": "Ontario", "city": "Toronto"},
+{"state": "Ontario", "city": "Ottawa"},
+{"state": "Ontario", "city": "Hamilton"},
+{"state": "Ontario", "city": "Kitchener"},
+{"state": "Ontario", "city": "Windsor"},
+{"state": "Alberta", "city": "Calgary"},
+{"state": "Alberta", "city": "Edmonton"},
+{"state": "Alberta", "city": "Airdrie"},
+{"state": "Manitoba", "city": "Winnipeg"},
+{"state": "Manitoba", "city": "Brandon"},
+{"state": "Manitoba", "city": "Morden"},
+{"state": "Manitoba", "city": "Thompson"},
+{"state": "Quebec", "city": "Montreal"},
+{"state": "Quebec", "city": "Laval"},
+{"state": "Quebec", "city": "Rimouski"}
+]
+}

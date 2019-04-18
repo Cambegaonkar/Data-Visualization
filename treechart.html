@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta city="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script>
+<style>
+body {margin: 0;}
+
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.center {float: center;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.center, 
+  ul.topnav li {float: none;}
+}
+</style>
+</head>
+<body>
+    
+<ul class="topnav">
+  <li><a href="index.html">Home</a></li>
+  <li><a href="barchart.html">Bar Chart</a></li>
+  <li><a href="piechart.html">Pie Chart</a></li>
+  <li><a href="map.html">Map</a></li>
+  <li><a class="active" href="treechart.html">Tree Chart</a></li>
+  <li><a href="line.html">Line Graph</a></li>
+</ul>
+    <h2>TREE CHART</h2>
+    <h2>Canada's different state with there belonging cities</h2>
+   
+    <svg style="width:1000px;height:1000px;">
+                </svg>
+            <script>
+                d3.json("data/tree.json", viz);
+                
+                function viz(data){                               
+                  
+                  var depthScale = d3.scaleOrdinal().range(["#ff9999", "#ddccff", "#66c2ff", "#75739f"]);
+        
+                  var nestedTweets = d3.nest().key(d => d.state).entries(data.canada);
+        
+                  var packableTweets = {id: "Canada", values: nestedTweets};
+        
+                  var root = d3.hierarchy(packableTweets, d => d.values);
+                    
+                  var treeChart = d3.tree();
+                  treeChart.size([600, 600]);
+                  var treeData = treeChart(root).descendants();
+                    
+                  d3.select("svg")
+                    .append("g")
+                    .attr("id", "treeG")
+                    .attr("transform", "translate(100,80)")
+                    .selectAll("g")
+                    .data(treeData)
+                    .enter()
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", d => `translate(${d.y},${d.x})`);
+                    
+                   d3.selectAll("g.node")
+                    .append("circle")
+                    .attr("r", d => 1 * d.descendants().length + 10)
+                    .style("fill", d => depthScale(d.depth))
+                    .style("stroke", "grey")
+                    .style("stroke-width", "2px");
+                    
+                  d3.selectAll("g.node")
+                    .append("text")
+                    .style("text-anchor","middle")
+                    .style("fill","#4f442b")
+                    .style("font-size","15px")
+                    .text(d => d.data.id || d.data.key || d.data.city);
+                    
+                 d3.select("#treeG")
+                    .selectAll("line")
+                    .data(treeData.filter(d => d.parent))
+                    .enter().insert("line","g")
+                    .attr("x1", d => d.parent.y)
+                    .attr("y1", d => d.parent.x)
+                    .attr("x2", d => d.y)
+                    .attr("y2", d => d.x)
+                    .style("stroke", "black");
+                    
+                treeZoom = d3.zoom();
+                treeZoom.on("zoom", zoomed);
+                d3.select("svg").call(treeZoom);
+        
+            function zoomed() {
+                console.log(d3.event);
+                d3.select("#treeG").attr("transform",`translate(${d3.event.transform.x},${d3.event.transform.y})`);
+                }
+            }
+    </script>
+    </body>
+    
+</html>
